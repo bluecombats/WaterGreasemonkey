@@ -8,7 +8,7 @@
 
 
 function doFirst(){
-	var w=window.innerWidth
+	/*var w=window.innerWidth
 	|| document.documentElement.clientWidth
 	|| document.body.clientWidth;
 
@@ -25,15 +25,16 @@ function doFirst(){
 	var box= document.createElement("div");
 	box.setAttribute("id", "backgroundWaterBreak");
 	box.style.display="inline";
-	box.style.height=boxheight;
-	box.style.width=boxwidth;
+	box.style.height=boxheight+"px";
+	box.style.width=boxwidth+"px";
 	box.style.postion="relative";
-	box.style.Left=boxY;
-	box.style.top=boxX;
+	box.style.left=boxY+"px";
+	box.style.top=boxX+"px";
 	//box.style.z-index=1;
 	box.style.borderStyle="solid";
     document.getElementsByTagName("body")[0].appendChild(box);
 	document.getElementById("backgroundWaterBreak").innerHTML="smack the pony";
+	*/
 }
 //generate times to drink
 function setIntervalTimes(interval,currentTime){
@@ -93,6 +94,15 @@ function CheckTime(drinkingTimes,breakTimes,currentTime){
 	}
 }
 function display(display){
+	if(display=="drink"){
+		alert("Have a drink");
+	}
+	else if(display=="break"){
+		alert("Get away from your computer for 15 minutes");
+	}
+	else{
+		alert("Get away from your computer and go and have a drink");
+	}
 }
 //Main Script starts here
 doFirst();
