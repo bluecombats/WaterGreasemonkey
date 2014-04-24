@@ -1,2 +1,3 @@
+Greasemonkey script, tested on firefox, in install click on the .user.js file then 'raw' if you have greasemonkey plugin or similar it should install.
 Designed to get people who sit in front of the computer a reminder to get a drink of water and get away from the screen for a bit.
-The code has 70% done, last bit is displaying it on the screen, this might be tricky. I've done the basic version i.e. display a alert. Kind of wanted a message box to come up instead and disappear after a minute, that's next.
+The basic one is done, it uses javascript alert, the full one will be a message box and disappear after a minute, or at least thats the dream.
