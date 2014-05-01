@@ -37,30 +37,55 @@ function doFirst(){
 	*/
 }
 //generate times to drink
-function setIntervalTimes(interval,currentTime){
-	//console.log(interval);
-	var stopTime=24*60*60*1000+currentTime;
-	//console.log("stop time=   "+stopTime);
-	var i=0, Intervals=new Array();
-	while(currentTime<stopTime){
-		//console.log(i);
-		currentTime=currentTime+(i+1)*interval;
-		Intervals[i]=currentTime;
+function setIntervalTimes(interval){
+	var i=0, remainder,hours, minutes, remainingseconds, Intervals=new Array();
+	stopTime=new Date();
+	startTime=new Date();
+
+	startTime.setHours(0);
+	startTime.setMinutes(0);
+	stopTime.setHours(24);
+	while((startTime<stopTime)||(i<10)){
+		Intervals[i]=new Date();
+		Intervals[i].setHours(0);
+		Intervals[i].setMinutes(0);
+		//remaining minutes and seconds
+		remainder=(i*interval)%(60*60); 
+		//remaining seconds
+		remainder=remainder%60;
+		Intervals[i].setSeconds(remainder);
+
+		hours=Math.floor((i*interval)/(60*60));
+		Intervals[i].setHours(hours);
+		remainingSeconds=(i*interval)-(60*60*hours);
+		minutes=Math.floor(remainingSeconds/60);
+
+		Intervals[i].setMinutes(minutes);
+		startTime=Intervals[i];
+		/*
+		console.log(i);
+		console.log(i*interval);
+		console.log("hours:"+hours+" minutes:"+minutes+" seconds:"+remainingSeconds);
+		console.log(Intervals[i]);
+		console.log("start Time: "+startTime);
+		console.log("stop Time: "+stopTime);
+		*/
 		i+=1;
 	}
 	return Intervals;
 }
 function CheckTime(drinkingTimes,breakTimes,currentTime){
-	var minus=currentTime-60*1000;
-	var plus=currentTime+60*1000;
-	var Check=0;
-	console.log("current time:"+currentTime);
-	console.log("minus   time:"+minus);
-	console.log("plus      time:"+plus);
+	var minus=new Date(),plus=new Date();
+	var Check=0,minutes;
+	minutes=currentTime.getMinutes();
+	plus.setMinutes(minutes+1);
+	minus.setMinutes(minutes-1);
+	//console.log("current time:"+currentTime);
+	//console.log("minus time:"+minus);
+	//console.log("plus time:"+plus);
 
 	for(var i=0;i<drinkingTimes.length;i++){
 		//between 2 minutes
-		//console.log(i+" drinkTime"+drinkingTimes[i]);
 		if((drinkingTimes[i]>minus)&&(drinkingTimes[i]<plus)){
 			console.log("Time to drink");
 			Check+=1;
@@ -71,7 +96,6 @@ function CheckTime(drinkingTimes,breakTimes,currentTime){
 	}
 	for(var i=0;i<breakTimes.length;i++){
 		//between 2 minutes
-		//console.log(i+" breakTime"+breakTimes[i]);
 		if((breakTimes[i]>minus)&&(breakTimes[i]<plus)){
 			console.log("Time to have a kitkat (joke)");
 			Check+=2;
@@ -110,34 +134,31 @@ function display(display){
 //Main Script starts here
 setTimeout(function(){
 	doFirst();
-	var day=0,stopTime,drinkingTimes=new Array(),breakTimes=new Array();
-	var currentTime=new Date();
-	//get times to drink
-	//every 30 minutes
-	drinkingTimes=setIntervalTimes(30*60*1000,currentTime.getTime());
-	//every 3 hours
-	breakTimes=setIntervalTimes(3*60*60*1000,currentTime.getTime());
-	stopTime=24*60*60*1000+currentTime.getTime();
+	var day=0,drinkingTimes=new Array(),breakTimes=new Array();
 	var Repeats=setInterval(function(){
-			console.log("Day "+day);
-			//get current time
-			console.log("C Time:"+currentTime.getTime());
-			console.log("S Time:"+stopTime);
-			console.log("breakTimes array length:"+breakTimes.length);
-			console.log("drinkingTimes array length:"+drinkingTimes.length);
+		var currentTime=new Date();
+		var startDayTime=new Date();
+		var stopTime=new Date();
+		startDayTime.setHours(0);
+		startDayTime.setMinutes(0);
+		stopTime.setHours(24);
+		//get times to drink
+		//every 30 minutes
+		drinkingTimes=setIntervalTimes(30*60,startDayTime);
+		//every 3 hours
+		breakTimes=setIntervalTimes(3*60*60,startDayTime);
+		console.log("Day "+day);
+		console.log("Current Time:"+currentTime);
+		console.log("Start Time:"+startDayTime);
+		console.log("Stop Time:"+stopTime);
+		//console.log("breakTimes: "+breakTimes);
+		//console.log("drinkingTimes: "+drinkingTimes);
 	
-			//currentTime=new Date();
-			CheckTime(drinkingTimes,breakTimes,currentTime.getTime());
-			//check to see if 24hrs has passed
-			if(currentTime.getTime()>stopTime){
-				clearInterval(Repeats);
-				day+=1;
-				//get times to drink
-				//every 30 minutes
-				drinkingTimes=setIntervalTimes(30*60*1000,currentTime.getTime());
-				//every 3 hours
-				breakTimes=setIntervalTimes(3*60*60*1000,currentTime.getTime());
-				stopTime=24*60*60*1000+currentTime.getTime();
-			}
+		CheckTime(drinkingTimes,breakTimes,currentTime);
+		//check to see if 24hrs has passed
+		if(currentTime>stopTime){
+			//clearInterval(Repeats);
+			day+=1;
+		}
 	},60*1000);
 },10*1000);
